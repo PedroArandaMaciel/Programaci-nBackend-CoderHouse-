@@ -1,0 +1,34 @@
+[
+  {
+    "nombre": "Maquina de afeitar",
+    "marca": "Gamma",
+    "tipo": "Electrodomestico",
+    "stock": 10,
+    "color": "Rojo",
+    "id": 1
+  },
+  {
+    "nombre": "Licuadora lps-220",
+    "marca": "Philips",
+    "tipo": "Electrodomestico",
+    "stock": 20,
+    "color": "Rojo",
+    "id": 2
+  },
+  {
+    "nombre": "Aire inverter 3200W",
+    "marca": "Samsung",
+    "tipo": "Electrodomestico",
+    "stock": 30,
+    "color": "Blanco",
+    "id": 3
+  },
+  {
+    "nombre": "Aire inverter 3200W",
+    "marca": "Samsung",
+    "tipo": "Electrodomestico",
+    "stock": 30,
+    "color": "Blanco",
+    "id": 4
+  }
+]
