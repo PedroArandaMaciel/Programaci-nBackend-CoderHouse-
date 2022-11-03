@@ -23,7 +23,7 @@ router.post('/', uploader.single('image'), async (request, response) => {
     if ((product.name && product.price) != '') {
         product.image = image;
         const result = await contenedor.save(product)
-        response.send({ status: "Success", message: "Product added" })
+        response.send({ product: result })
     } else {
         response.send({ status: "error", message: "faltan completar campos obligatorios" })
     }
@@ -31,6 +31,13 @@ router.post('/', uploader.single('image'), async (request, response) => {
 router.delete('/:id', async (request, response) => {
     const id = request.params.id
     let result = await contenedor.deleteById(id)
+    response.send(result)
+})
+router.put('/:id', async (request, response) => {
+    const id = request.params.id
+    const productBody = request.body
+
+    let result = await contenedor.updateItem(productBody, id)
     response.send(result)
 })
 export default router;

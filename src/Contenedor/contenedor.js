@@ -1,7 +1,7 @@
 import fs from 'fs'
 import __dirName from '../utils.js'
 
-const pathToFile =__dirName+'/files/productos.json'
+const pathToFile = __dirName + '/files/productos.json'
 
 class Contenedor {
     save = async (product) => {
@@ -66,7 +66,7 @@ class Contenedor {
             } else {
                 return {
                     status: "Error",
-                    message: "No products found"
+                    message: "Route not found"
                 }
             }
         } catch (error) {
@@ -88,7 +88,7 @@ class Contenedor {
             } else {
                 return {
                     status: "Error",
-                    message: "No products found"
+                    message: "Route not found"
                 }
             }
         } catch (error) {
@@ -109,16 +109,23 @@ class Contenedor {
             if (fs.existsSync(pathToFile)) {
                 let data = await fs.promises.readFile(pathToFile, "utf-8")
                 let productos = JSON.parse(data)
-                let newProduct = productos.filter((product) => product.id != id);
-                await fs.promises.writeFile(pathToFile, JSON.stringify(newProduct, null, 2))
-                return {
-                    status: "success",
-                    message: "Product deleted successfully"
+                if (productos.find(producto => producto.id == id)) {
+                    let newProduct = productos.filter((product) => product.id != id);
+                    await fs.promises.writeFile(pathToFile, JSON.stringify(newProduct, null, 2))
+                    return {
+                        status: "success",
+                        message: "Product deleted successfully"
+                    }
+                } else {
+                    return {
+                        status: "Error",
+                        Message: "Product not found"
+                    }
                 }
             } else {
                 return {
                     status: "Error",
-                    Message: "No product found"
+                    Message: "Route not found"
                 }
             }
         } catch (error) {
@@ -135,7 +142,7 @@ class Contenedor {
             } else {
                 return {
                     status: "Error",
-                    Message: "No file found"
+                    Message: "File not found"
                 }
             }
         } catch (error) {
@@ -157,7 +164,7 @@ class Contenedor {
             } else {
                 return {
                     status: "Error",
-                    Message: "No file found"
+                    Message: "File not found"
                 }
             }
         } catch (error) {
@@ -167,5 +174,44 @@ class Contenedor {
             }
         }
     }
+    updateItem = async (object, id) => {
+        if (!id) {
+            return {
+                status: "Error",
+                message: "ID is required"
+            }
+        }
+        let products = await this.getAll()
+        try {
+            let arrayProducts = products.products.map(product => {
+                if (product.id == id) {
+                    return {
+                        name: object.name ? object.name : product.name,
+                        price: object.price ? object.price : product.price,
+                        image: object.image ? object.image : product.image,
+                        id: product.id
+                    }
+                } else {
+                    return product
+                }
+            })
+            let productUpdate = arrayProducts.find(product => product.id == id)
+            if (productUpdate) {
+                await fs.promises.writeFile(pathToFile, JSON.stringify(arrayProducts, null, 2))
+                return {
+                    status: "success",
+                    message: "successfully upgraded product",
+                    productNew: productUpdate
+                }
+            } else {
+                return {
+                    status: "error",
+                    message: "Product not found"
+                }
+            }
+        } catch {
+            return products
+        }
+    }
 }
-export default  Contenedor
+export default Contenedor
