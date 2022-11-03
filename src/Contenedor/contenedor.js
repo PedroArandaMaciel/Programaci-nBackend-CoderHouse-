@@ -1,10 +1,11 @@
 import fs from 'fs'
+import __dirName from '../utils.js'
 
-const pathToFile = './productos.json'
+const pathToFile =__dirName+'/files/productos.json'
 
 class Contenedor {
     save = async (product) => {
-        if (!product.nombre || !product.stock || !product.marca) {
+        if (!product.name || !product.price) {
             return {
                 status: "Error",
                 message: "Missing required fields"

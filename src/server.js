@@ -1,6 +1,6 @@
 import express, { response } from 'express';
 import fs from 'fs';
-import Contenedor from '../contenedor.js';
+import Contenedor from './Contenedor/contenedor.js';
 
 const app = express()
 const server = app.listen(8080, () => console.log("Listening on Express"))
