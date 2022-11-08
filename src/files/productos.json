@@ -4,5 +4,11 @@
     "price": "5000",
     "image": "",
     "id": 1
+  },
+  {
+    "name": "Pedro Enrique Aranda Maciel",
+    "price": "43",
+    "image": "",
+    "id": 2
   }
 ]
