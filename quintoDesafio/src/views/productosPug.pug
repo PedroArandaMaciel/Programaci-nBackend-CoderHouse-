@@ -1,0 +1,16 @@
+html
+    head 
+        title="Productos"
+    body
+        div 
+            h1='Lista de productos'
+            if mensaje
+              p !{mensaje}
+            else if productos.products
+              each producto in productos.products  
+                  p=producto.name
+                  p=producto.price
+                  img(src=producto.image)
+                  br
+        a(href='http://localhost:8080/')
+            button Agregar Productos

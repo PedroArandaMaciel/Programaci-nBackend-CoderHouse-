@@ -5,7 +5,19 @@ import uploader from "../services/upload.js";
 const router = Router();
 const contenedor = new Contenedor()
 
+router.get('/productos', async (request, response) => {
+    const productos = await contenedor.getAll()
+    if (productos.products.length != 0) {
+        response.render('productos.handlebars', {        //Views: productos.handlebars || productosPug.pug || productosEjs.ejs
+            productos
+        })
+    } else {
+        response.render('productos.handlebars', {        //Views: productos.handlebars || productosPug.pug || productosEjs.ejs
+            mensaje: "No hay productos agregados"
+        })
+    }
 
+})
 router.post('/', uploader.single('image'), async (request, response) => {
     let image = ""
     if (request.file) {
