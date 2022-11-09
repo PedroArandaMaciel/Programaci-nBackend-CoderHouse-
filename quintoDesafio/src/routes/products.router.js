@@ -13,7 +13,9 @@ router.get('/productos', async (request, response) => {
         })
     } else {
         response.render('productos.handlebars', {        //Views: productos.handlebars || productosPug.pug || productosEjs.ejs
-            mensaje: "No hay productos agregados"
+            productos : {
+                mensaje: "No hay productos agregados"
+            }
         })
     }
 

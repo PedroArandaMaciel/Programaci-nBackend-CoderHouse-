@@ -1,11 +1,15 @@
 <div>
     <h1>Hola</h1>
         <div>
-            <% productos.products.forEach(producto => { %>
-                <p><%= producto.name  %> </p>
-                <p><%= producto.price  %> </p>
-                <img src=<%= producto.image %>>
-            <% }) %>
+            <% if (!productos.mensaje) { %>
+                <% productos.products.forEach(producto => { %>
+                    <p><%= producto.name  %> </p>
+                    <p><%= producto.price  %> </p>
+                    <img src=<%= producto.image %>>
+                <% }) %>
+            <% } else { %>
+                <p><%= productos.mensaje  %> </p>
+             <% } %> 
         </div>
         <a href="http://localhost:8080/"><button>Agregar Productos</button></a>
 </div>

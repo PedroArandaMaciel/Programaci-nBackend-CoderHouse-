@@ -4,8 +4,8 @@ html
     body
         div 
             h1='Lista de productos'
-            if mensaje
-              p !{mensaje}
+            if productos.mensaje
+              p !{productos.mensaje}
             else if productos.products
               each producto in productos.products  
                   p=producto.name
