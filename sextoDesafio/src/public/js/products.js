@@ -6,7 +6,7 @@ socket.on('savedProducts', data => {
     const productsDiv = document.getElementById('products')
     let products = ''
     data.forEach(pdt => {
-        products += `<div>${pdt.name} cuesta $${pdt.price}</div><br>`
+        products += `<td>${pdt.name}</td><td>$${pdt.price}</td>`
     });
-    productsDiv.innerHTML += products
+    productsDiv.innerHTML = products
 })
