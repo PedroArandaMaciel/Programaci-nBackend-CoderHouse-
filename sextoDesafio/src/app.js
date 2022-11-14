@@ -4,8 +4,10 @@ import __dirName from './utils.js';
 import handlebars from 'express-handlebars'
 import { Server } from 'socket.io';
 import Contenedor from './Contenedor/contenedor.js';
+import contenedorMsg from './Contenedor/contenedorMsg.js';
 
 const contenedor = new Contenedor()
+const arrayMsgServer = new contenedorMsg()
 const app = express()
 
 app.use(express.static(__dirName+'/public'));
@@ -23,16 +25,24 @@ const server = app.listen(8080, ()=>console.log('listening'));
 const io = new Server(server)
 
 
-const read = async () => {
-    let pdts = await contenedor.getAll()
-    pdts.products.forEach(pdt => {
+const products = [];
+const messages = [];
+const readProducts = async () => {              //traer productos y mensajes del sv
+    let data = await contenedor.getAll()
+    data.products.forEach(pdt => {
         products.push(pdt)
     });
 }
-const products = [];
-const messages = [];
-read()
-io.on('connection', socket => {             //conexion sv
+const readMessages = async () => {
+    let data = await arrayMsgServer.getAllMsgs()
+    data.messages.forEach(msg => {
+        messages.push(msg)
+    })
+}
+readProducts();
+readMessages();
+
+io.on('connection', socket => {                 //conexion sv
     socket.emit('savedProducts', products)
     socket.on('addNew', data => {
         products.push(data)
@@ -44,6 +54,7 @@ io.on('connection', socket => {             //conexion sv
     socket.on('message', data => {
         if (data.emailUser != undefined){
             messages.push(data)
+            arrayMsgServer.save(data)
             io.emit('logs', messages)
         }       
     })
