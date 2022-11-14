@@ -4,7 +4,7 @@ import uploader from "../services/upload.js";
 
 const router = Router();
 const contenedor = new Contenedor()
-
+//products
 router.get('/productos', async (request, response) => {
     const productos = await contenedor.getAll()
     if (productos.products.length != 0) {
@@ -35,7 +35,9 @@ router.post('/', uploader.single('image'), async (request, response) => {
     }
 })
 
-
-
+//chat
+router.get('/', (req, res) => {
+    res.render('chat');
+})
 
 export default router;

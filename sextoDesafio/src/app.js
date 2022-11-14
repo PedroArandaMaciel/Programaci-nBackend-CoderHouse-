@@ -1,8 +1,8 @@
-import express, { request, response }  from 'express';
-import productosRouter from './routes/products.router.js';
+import express  from 'express';
+import productosRouter from './routes/views.router.js';
 import __dirName from './utils.js';
 import handlebars from 'express-handlebars'
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import Contenedor from './Contenedor/contenedor.js';
 
 const contenedor = new Contenedor()
@@ -17,11 +17,11 @@ app.set('views', __dirName + '/views')
 app.set('view engine', 'handlebars')                    
 app.use('/', productosRouter);
 app.use('/productos', productosRouter);
-
-
+app.use('/chat', productosRouter)
 
 const server = app.listen(8080, ()=>console.log('listening'));
 const io = new Server(server)
+
 
 const read = async () => {
     let pdts = await contenedor.getAll()
@@ -30,13 +30,26 @@ const read = async () => {
     });
 }
 const products = [];
+const messages = [];
 read()
 io.on('connection', socket => {             //conexion sv
     socket.emit('savedProducts', products)
-
     socket.on('addNew', data => {
-        console.log(data)
         products.push(data)
         io.emit('savedProducts', products)
     })
+
+    //chat
+    socket.emit('logs', messages)
+    socket.on('message', data => {
+        if (data.emailUser != undefined){
+            messages.push(data)
+            io.emit('logs', messages)
+        }       
+    })
+    socket.on('authenticated', data => {
+        console.log(`El usuario ${data.email} se pudo autenticar`)
+        socket.broadcast.emit('newUserConnected', data.email)
+    })
+
 })
