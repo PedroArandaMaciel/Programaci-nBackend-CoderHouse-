@@ -1,0 +1,128 @@
+import fs from 'fs'
+import __dirName from '../utils.js'
+
+class ContenedorCarrito {
+
+    constructor() {
+        this.path = `${__dirName}/files/carrito.json`
+        this.init()
+    }
+    init = async () => {
+        if (!fs.existsSync(this.path)) await fs.promises.writeFile(this.path, JSON.stringify([]))
+    }
+    readFile = async () => {
+        let data = await fs.promises.readFile(this.path, 'utf-8')
+        return JSON.parse(data);
+    }
+    exists = async (id) => {
+        let carts = await this.getCarts()
+        return carts.some(cart => cart.id === id)
+    }
+
+    createCart = async (fh) => {
+        const carts = await this.readFile()
+        const newCart = {
+            id: carts.length === 0 ? 1 : carts[carts.length - 1].id + 1,
+            timestamp: fh,
+            cart: []
+        }
+        carts.push(newCart)
+        await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'))
+        return newCart
+    }
+    getCarts = () => {
+        return this.readFile()
+    }
+    getCartById = async (id) => {
+        if (!id) {
+            return {
+                status: "Error",
+                message: "ID is required"
+            }
+        }
+        const carts = await this.readFile()
+        const cart = carts.find((cart) => cart.id === id)
+        if (cart) {
+            return {
+                status: "success",
+                cart: cart
+            }
+        } else {
+            return {
+                status: "error",
+                message: "Cart not fount"
+            }
+        }
+    }
+    deleteCartById = async (id) => {
+        if (!id) {
+            return {
+                status: "Error",
+                message: "ID is required"
+            }
+        }
+        const carts = await this.readFile()
+        if (carts.find(cart => cart.id === id)) {
+            let newCarts = carts.filter((cart) => cart.id != id)
+            await fs.promises.writeFile(this.path, JSON.stringify(newCarts, null, '\t'))
+            return {
+                status: "success",
+                message: "Cart deleted successfully"
+            }
+        } else {
+            return {
+                status: "error",
+                message: "Cart not fount"
+            }
+        }
+    }
+    addProduct = async (id, product) => {
+        if (!id || !product) {
+            return {
+                status: "Error",
+                message: "param is required"
+            }
+        }
+        let carts = await this.readFile()
+        let newCarts = carts.map(cart => {
+            if (cart.id == id) {
+                return {
+                    id: cart.id,
+                    timestamp: cart.timestamp,
+                    cart: [...cart.cart, {
+                        id: product.id,
+                        quantity: product.quantity
+                    }]
+                }
+            } else {
+                return cart
+            }
+        })
+        await fs.promises.writeFile(this.path, JSON.stringify(newCarts, null, '\t'))
+        return newCarts
+    }
+
+
+    
+    ///genero carrito a medida que se ingresa producto (anotacion)
+    //saveCart = async (cart) => {
+    //    if (!cart) {
+    //        return {
+    //            status: "Error",
+    //            message: "param required"
+    //        }
+    //    }
+    //    const carts = await this.readFile()
+    //    if (carts.length === 0) cart.id = 1
+    //    else cart.id = carts[carts.length - 1].id + 1
+    //    carts.push(cart);
+    //    await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'))
+    //    return {
+    //        status: "success",
+    //        message: "Cart added successfully",
+    //        id: `Se le asigno el id ${cart.id}`
+    //    }
+    //}
+}
+
+export default ContenedorCarrito;
