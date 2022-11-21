@@ -15,7 +15,7 @@ app.set('views', __dirName + '/views')
 app.set('view engine', 'handlebars')     
 
 app.use('/api/products', productsRouter);
-app.use('/api/carrito', carritoRouter)
+app.use('/api/carts', carritoRouter)
 
 
 const server = app.listen(PORT, () => console.log('Listening'))

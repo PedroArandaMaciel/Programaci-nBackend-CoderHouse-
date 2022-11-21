@@ -76,6 +76,9 @@ class ContenedorCarrito {
             }
         }
     }
+
+
+
     addProduct = async (id, product) => {
         if (!id || !product) {
             return {
@@ -84,26 +87,54 @@ class ContenedorCarrito {
             }
         }
         let carts = await this.readFile()
-        let newCarts = carts.map(cart => {
-            if (cart.id == id) {
+        let addedProduct;
+        //se genera el nuevo producto
+         let newCarts = carts.map(cart => {
+             if (cart.id === id) {
+                 return addedProduct = {
+                     id: cart.id,
+                     timestamp: cart.timestamp,
+                     cart: [...cart.cart, {
+                         id: product.id,
+                         quantity: product.quantity
+                     }]
+                 }
+             } else {
+                 return cart
+             }
+         })
+
+
+         await fs.promises.writeFile(this.path, JSON.stringify(newCarts, null, '\t'))
+         return {status:"success",payload: addedProduct}
+    }
+
+
+
+    deleteProduct = async (cid, pid) => {
+        let carts = await this.readFile()
+        let newProducts = carts.map(cart => {
+            if (cart.id === cid) {
+                let products = []
+                cart.cart.map(product => {
+                    if (product.id != pid) {
+                        products.push(product)
+                    }
+                })
                 return {
                     id: cart.id,
                     timestamp: cart.timestamp,
-                    cart: [...cart.cart, {
-                        id: product.id,
-                        quantity: product.quantity
-                    }]
+                    cart: products
                 }
             } else {
                 return cart
             }
         })
-        await fs.promises.writeFile(this.path, JSON.stringify(newCarts, null, '\t'))
-        return newCarts
+        await fs.promises.writeFile(this.path, JSON.stringify(newProducts, null, '\t'))
+        return newProducts
     }
 
 
-    
     ///genero carrito a medida que se ingresa producto (anotacion)
     //saveCart = async (cart) => {
     //    if (!cart) {

@@ -28,8 +28,14 @@ router.delete('/:cid', async (req, res) => {
 
 router.get('/:cid/products', async (req, res) => {
     const id = parseInt(req.params.cid)
-    let carts = await contenedorCarrito.getCartById(id)
-    res.send({ payload: carts.cart.cart })
+    let cart = await contenedorCarrito.getCartById(id)
+    let products=[];
+    if(cart.status != "error"){
+        cart.cart.cart.map(product => products.push(product))
+        res.send({ payload: products })
+    }else{
+        res.send(cart)
+    }
 })
 
 router.post('/:cid/products', async (req, res) => {
@@ -39,9 +45,22 @@ router.post('/:cid/products', async (req, res) => {
         const product = req.body
         let productToInsert = await contenedorCarrito.addProduct(id, product)
         res.send(productToInsert)
+    }else{
+        res.send({
+            status: "error",
+            error: "Cart not found"
+        })
     }
 })
 
+router.delete('/:cid/products/:pid', async (req, res) => {
+    const carritoId = parseInt(req.params.cid)
+    const productId = parseInt(req.params.pid)
+
+    const result = await contenedorCarrito.deleteProduct(carritoId, productId)
+    res.send(result)
+
+})
 
 
 ///genero carrito a medida que se ingresa producto (anotacion)
