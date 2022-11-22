@@ -40,7 +40,7 @@ router.post('/', uploader.single('image'), async (request, response) => {
         } else {
             response.send({ status: "error", message: "incompleted values" })
         }
-    }else{
+    } else {
         response.send({ status: "error", description: "unauthorized path for post method" })
     }
 })

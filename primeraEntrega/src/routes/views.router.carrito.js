@@ -29,23 +29,23 @@ router.delete('/:cid', async (req, res) => {
 router.get('/:cid/products', async (req, res) => {
     const id = parseInt(req.params.cid)
     let cart = await contenedorCarrito.getCartById(id)
-    let products=[];
-    if(cart.status != "error"){
+    let products = [];
+    if (cart.status != "error") {
         cart.cart.cart.map(product => products.push(product))
         res.send({ payload: products })
-    }else{
+    } else {
         res.send(cart)
     }
 })
 
 router.post('/:cid/products', async (req, res) => {
-    const id = parseInt(req.params.cid)
-    const existsCart = await contenedorCarrito.exists(id)
+    const cid = parseInt(req.params.cid)
+    const existsCart = await contenedorCarrito.exists(cid)
     if (existsCart) {
         const product = req.body
-        let productToInsert = await contenedorCarrito.addProduct(id, product)
+        let productToInsert = await contenedorCarrito.addProduct(cid, product)
         res.send(productToInsert)
-    }else{
+    } else {
         res.send({
             status: "error",
             error: "Cart not found"
@@ -56,23 +56,33 @@ router.post('/:cid/products', async (req, res) => {
 router.delete('/:cid/products/:pid', async (req, res) => {
     const carritoId = parseInt(req.params.cid)
     const productId = parseInt(req.params.pid)
-
-    const result = await contenedorCarrito.deleteProduct(carritoId, productId)
-    res.send(result)
-
+    const existsCart = await contenedorCarrito.exists(carritoId)
+    if (existsCart) {
+        const result = await contenedorCarrito.deleteProduct(carritoId, productId)
+        res.send(result)
+    } else {
+        res.send({
+            status: "error",
+            error: "Cart not found"
+        })
+    }
 })
 
 
-///genero carrito a medida que se ingresa producto (anotacion)
-//router.post('/', async (req, res) => {
-//    const {products} = req.body
-//    if (!products) return res.status(400).send({status:"error", error: "incompleted value"})
-//    const productsToInsert = {
-//        products: products,
-//        timestamp: fechaHora()
-//    }
-//    const result = await contenedorCarrito.saveCart(productsToInsert)
-//    res.send(result)
-//})
+
+
+/*
+///genero carrito a medida que se ingresa producto (ANOTACION DE CODIGO GENERADO)
+router.post('/', async (req, res) => {
+    const {products} = req.body
+    if (!products) return res.status(400).send({status:"error", error: "incompleted value"})
+    const productsToInsert = {
+        products: products,
+        timestamp: fechaHora()
+    }
+    const result = await contenedorCarrito.saveCart(productsToInsert)
+    res.send(result)
+})
+*/
 
 export default router;
