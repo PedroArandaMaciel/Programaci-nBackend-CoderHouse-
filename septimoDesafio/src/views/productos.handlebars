@@ -1,0 +1,12 @@
+<div>
+    <h1>Lista de productos</h1>
+    <div>
+        {{#each productos.products}}
+        <p>{{this.name}}</p>
+        <p>{{this.price}}</p>
+        <img src={{this.image}}>
+        <br>
+        {{/each}}
+    </div>
+    <a href="http://localhost:8080/"><button>Agregar Productos</button></a>
+</div>

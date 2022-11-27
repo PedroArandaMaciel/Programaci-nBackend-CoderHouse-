@@ -1,0 +1,19 @@
+<div>
+    <a href="http://localhost:8080/"><button>VOLVER</button></a>
+    <div>
+        <h1>Centro de mensajes</h1>
+        <p>Por favor ingrese su email para poder enviar mensajes</p>
+        <label>Email: </label>
+        <input type="email" id="userMail" placeholder="pedro@gmail.com">
+    </div><br><br>
+    <div>
+        <h4>Mensajes de clientes. <a id="saludoUser"></a></h4>
+        <p id="logsPanel"></p>
+        <input id="chatBox" placeholder="ingrese su mensaje" disabled>
+        <button id="sendMsgButton">Enviar!</button>
+    </div>
+</div>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>
