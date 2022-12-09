@@ -15,7 +15,7 @@ const fechaHora = () => {
 }
 class Contenedor {
     save = async (product) => {
-        if (!product.title || !product.description || !product.code || !product.price || !product.stock) {
+        if(!product.title || !product.description || !product.code || !product.price || !product.stock){
             return {
                 status: "Error",
                 message: "Missing required fields"
