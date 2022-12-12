@@ -1,0 +1,32 @@
+[
+  {
+    "title": "colchonEditado",
+    "description": "barata buena calidad",
+    "code": 7,
+    "price": 26000,
+    "stock": 10,
+    "thumbnail": "",
+    "id": 1,
+    "timestamp": "12/11/2022 - 0:29:48"
+  },
+  {
+    "title": "pizzaEditado",
+    "description": "barata buena calidad",
+    "code": 7,
+    "price": 26000,
+    "stock": 10,
+    "thumbnail": "",
+    "id": 2,
+    "timestamp": "12/11/2022 - 0:30:26"
+  },
+  {
+    "title": "colchon",
+    "description": "barata buena calidad",
+    "code": 7,
+    "price": 26000,
+    "stock": 10,
+    "thumbnail": "",
+    "id": 3,
+    "timestamp": "12/11/2022 - 0:28:27"
+  }
+]
