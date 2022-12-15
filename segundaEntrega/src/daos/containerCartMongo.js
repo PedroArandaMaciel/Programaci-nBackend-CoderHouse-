@@ -4,7 +4,7 @@ class containerCartMongo {
     createCart = async (fh) => {
         const newCart = {
             timestamp: fh,
-            products: []
+            products: [{ "pepe": "pepe" }, { "pepe2": "pepe" }, { "pepe2": "pepe" }]
         }
         try {
             let response = await cartModel.create(newCart)
@@ -22,7 +22,7 @@ class containerCartMongo {
         if (carts.length > 0) {
             return {
                 status: "success",
-                carts: carts
+                carts
             }
         } else {
             return {
@@ -31,7 +31,6 @@ class containerCartMongo {
             }
         }
     }
-//revisando
     getCartById = async (idArgument) => {
         if (!idArgument) {
             return {
@@ -41,7 +40,7 @@ class containerCartMongo {
         }
         try {
             let cart = await cartModel.find({ _id: idArgument }, { __v: 0 })
-            if (cart) {
+            if (cart.length > 0) {
                 return {
                     status: "success",
                     cart: cart
@@ -53,10 +52,17 @@ class containerCartMongo {
                 }
             }
         } catch (error) {
-
+            return {
+                status: "Error",
+                message: error.message
+            }
         }
 
     }
+    //faltan implementar
+    deleteCartById = async (idArgument) => { }
+    addProduct = async (idArgument, product) => { }
+    deleteProduct = async (cid, pid) => { }
 }
 
 export default containerCartMongo

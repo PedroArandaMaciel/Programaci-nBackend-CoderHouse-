@@ -45,7 +45,7 @@ class containerProductMongo {
     }
 
     getAll = async () => {
-        let products = await productModel.find({}, { _id: 0, __v: 0, code: 0 })
+        let products = await productModel.find({}, { __v: 0, code: 0 })
         if (products.length != 0) {
             return {
                 status: "success",
@@ -59,13 +59,20 @@ class containerProductMongo {
         }
     }
 
-    deleteById = async (id) => {
+    updateItem = async (object, id) => {
         try {
-            let response = await productModel.deleteOne({ _id: id })
-            if (response.deletedCount > 0) {
+            let newProd = { title: object.title, description: object.description, code: object.code, price: object.price, stock: object.stock }
+            let response = await productModel.updateOne({ _id: id }, newProd)
+            if (response.modifiedCount > 0) {
                 return {
                     status: "success",
-                    message: "Product deleted successfully"
+                    message: "Product updated successfully",
+                    newProd
+                }
+            } else if (response.matchedCount > 0) {
+                return {
+                    status: "Error",
+                    Message: "unmodified product"
                 }
             } else {
                 return {
@@ -81,18 +88,13 @@ class containerProductMongo {
         }
     }
 
-    updateItem = async (object, id) => {
+    deleteById = async (id) => {
         try {
-            let response = await productModel.updateOne({ _id: id }, { title: object.title, description: object.description, code: object.code, price: object.price, stock: object.stock })
-            if (response.modifiedCount > 0) {
+            let response = await productModel.deleteOne({ _id: id })
+            if (response.deletedCount > 0) {
                 return {
                     status: "success",
-                    message: "Product updated successfully"
-                }
-            } else if (response.matchedCount > 0) {
-                return {
-                    status: "Error",
-                    Message: "unmodified product"
+                    message: "Product deleted successfully"
                 }
             } else {
                 return {

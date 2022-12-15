@@ -74,7 +74,7 @@ class ContenedorCarrito {
             }
         }
     }
-    deleteCartById = async (idArgument) => { //falta
+    deleteCartById = async (idArgument) => {
         if (!idArgument) {
             return {
                 status: "Error",
@@ -97,7 +97,7 @@ class ContenedorCarrito {
             }
         }
     }
-    addProduct = async (idArgument, product) => { //falta
+    addProduct = async (idArgument, product) => {
         if (!idArgument || !product) {
             return {
                 status: "Error",
@@ -127,7 +127,7 @@ class ContenedorCarrito {
         await fs.promises.writeFile(this.path, JSON.stringify(newCarts, null, '\t'))
         return { status: "success", payload: addedProduct }
     }
-    deleteProduct = async (cid, pid) => { //falta
+    deleteProduct = async (cid, pid) => { 
         let carts = await this.readFile()
         let deletedProd = []
         let editedProducts = carts.map(cart => {

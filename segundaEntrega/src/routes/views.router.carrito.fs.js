@@ -34,12 +34,19 @@ router.delete('/:cid', async (req, res) => {
 router.get('/:cid/products', async (req, res) => {
     const id = req.params.cid
     let data = await contenedorCarrito.getCartById(id)
-    let products = [];
-    if (data.status === "success") {
-        data.cart.products.map(product => products.push(product))
-        res.send({ payload: products })
+    if (contenedor.persistenciaFsBoolean) { //Si se usa filesystem, se lee diferente la data por su estructura
+        if(data.status != "error"){
+            res.send({ status: "success", products: data.cart.products })
+        }else{
+            res.send(data)
+        }
     } else {
-        res.send(data)
+        if (data.status === "success") {
+            let products = data.cart[0].products
+            res.send({ status: "success", products })
+        } else {
+            res.send(data)
+        }
     }
 })
 
@@ -61,7 +68,7 @@ router.post('/:cid/products', async (req, res) => {
         } else {
             res.send({
                 status: "Error",
-                error: "Cart not found"
+                message: "Cart not found"
             })
         }
     }
