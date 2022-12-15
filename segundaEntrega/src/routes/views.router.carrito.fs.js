@@ -21,7 +21,10 @@ router.post('/', async (req, res) => {
     const newCart = await contenedorCarrito.createCart(fechaHora())
     res.send({ status: "success", payload: newCart })
 })
-
+router.get('/', async (req, res) => {
+    const carts = await contenedorCarrito.getCarts()
+    res.send({ payload: carts })
+})
 router.delete('/:cid', async (req, res) => {
     const id = parseInt(req.params.cid)
     const cart = await contenedorCarrito.deleteCartById(id)
@@ -29,22 +32,22 @@ router.delete('/:cid', async (req, res) => {
 })
 
 router.get('/:cid/products', async (req, res) => {
-    const id = parseInt(req.params.cid)
+    const id = req.params.cid
     let data = await contenedorCarrito.getCartById(id)
     let products = [];
     if (data.status === "success") {
         data.cart.products.map(product => products.push(product))
         res.send({ payload: products })
     } else {
-        res.send(cart)
+        res.send(data)
     }
 })
 
 router.post('/:cid/products', async (req, res) => {
-    const id = parseInt(req.params.cid)
+    const id = req.params.cid
     const product = req.body
 
-    const existProd = await contenedorProd.getById(parseInt(product.id))
+    const existProd = await contenedorProd.getById(product.id)
     if (existProd.status === "Error") {
         res.send({
             status: "Error",

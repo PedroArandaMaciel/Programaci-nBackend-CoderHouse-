@@ -14,9 +14,10 @@ class ContenedorCarrito {
         let data = await fs.promises.readFile(this.path, 'utf-8')
         return JSON.parse(data);
     }
-    exists = async (id) => {
+    exists = async (idArgument) => {
+        let id = parseInt(idArgument)
         let carts = await this.getCarts()
-        return carts.some(cart => cart.id === id)
+        return carts.carts.some(cart => cart.id === id)
     }
 
     createCart = async (fh) => {
@@ -30,37 +31,57 @@ class ContenedorCarrito {
         await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'))
         return newCart
     }
-    getCarts = () => {
-        return this.readFile()
-    }
-    getCartById = async (id) => {
-        if (!id) {
-            return {
-                status: "Error",
-                message: "ID is required"
-            }
-        }
-        const carts = await this.readFile()
-        const cart = carts.find((cart) => cart.id === id)
-        if (cart) {
+    getCarts = async () => {
+        let carts = await this.readFile()
+        if (carts.length > 0) {
             return {
                 status: "success",
-                cart: cart
+                carts: carts
             }
         } else {
             return {
-                status: "error",
-                message: "Cart not fount"
+                status: "Error",
+                message: "Carts not fount"
             }
         }
     }
-    deleteCartById = async (id) => {
-        if (!id) {
+    getCartById = async (idArgument) => {
+        if (!idArgument) {
             return {
                 status: "Error",
                 message: "ID is required"
             }
         }
+        try {
+            let id = parseInt(idArgument)
+            const carts = await this.readFile()
+            const cart = carts.find((cart) => cart.id === id)
+            if (cart) {
+                return {
+                    status: "success",
+                    cart: cart
+                }
+            } else {
+                return {
+                    status: "error",
+                    message: "Cart not fount"
+                }
+            }
+        } catch (error) {
+            return {
+                status: "Error",
+                message: error.message
+            }
+        }
+    }
+    deleteCartById = async (idArgument) => { //falta
+        if (!idArgument) {
+            return {
+                status: "Error",
+                message: "ID is required"
+            }
+        }
+        let id = parseInt(idArgument)
         const carts = await this.readFile()
         if (carts.find(cart => cart.id === id)) {
             let newCarts = carts.filter((cart) => cart.id != id)
@@ -76,13 +97,14 @@ class ContenedorCarrito {
             }
         }
     }
-    addProduct = async (id, product) => {
-        if (!id || !product) {
+    addProduct = async (idArgument, product) => { //falta
+        if (!idArgument || !product) {
             return {
                 status: "Error",
                 message: "param is required"
             }
         }
+        let id = parseInt(idArgument)
         let carts = await this.readFile()
         let addedProduct;
         //se genera el nuevo producto
@@ -105,27 +127,30 @@ class ContenedorCarrito {
         await fs.promises.writeFile(this.path, JSON.stringify(newCarts, null, '\t'))
         return { status: "success", payload: addedProduct }
     }
-    deleteProduct = async (cid, pid) => {
+    deleteProduct = async (cid, pid) => { //falta
         let carts = await this.readFile()
-        let newProducts = carts.map(cart => {
+        let deletedProd = []
+        let editedProducts = carts.map(cart => {
             if (cart.id === cid) {
                 let products = []
-                cart.cart.map(product => {
+                cart.products.map(product => {
                     if (product.id != pid) {
                         products.push(product)
+                    } else {
+                        deletedProd.push(product)
                     }
                 })
                 return {
                     id: cart.id,
                     timestamp: cart.timestamp,
-                    cart: products
+                    products: products
                 }
             } else {
                 return cart
             }
         })
-        await fs.promises.writeFile(this.path, JSON.stringify(newProducts, null, '\t'))
-        return newProducts
+        await fs.promises.writeFile(this.path, JSON.stringify(editedProducts, null, '\t'))
+        return { status: "success", message: "Deleted product", deletedProd }
     }
 }
 

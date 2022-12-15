@@ -2,17 +2,14 @@ import containerCardFs from './containerCartFs.js'
 import containerProductFs from './containerProductFs.js'
 import containerCardMongo from './containerCartMongo.js'
 import containerProductMongo from './containerProductMongo.js'
-import mongoose from 'mongoose'
+import connectionMongo from '../config.js'
 
-const persistencia = 'Mongo'  //Editar persistencia para cambiar DB. Mongo o Firebase
+const persistencia = 'Firebase'  //Editar persistencia para cambiar DB. Mongo o Firebase
 
 
 
 if (persistencia == "Mongo") {
-    const connection = mongoose.connect('mongodb+srv://CoderUser:1234@codercluster.mwzreyn.mongodb.net/BasePrueba?retryWrites=true&w=majority', err => {
-        if (err) console.log(err)
-        else console.log("Base conectada")
-    })
+    connectionMongo()
 }
 export default function setDb() {
     switch (persistencia) {
