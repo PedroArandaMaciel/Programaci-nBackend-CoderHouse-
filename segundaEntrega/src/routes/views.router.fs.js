@@ -1,5 +1,4 @@
 import { Router } from "express";
-//import Contenedor from "../daos/containerProductFs.js";
 import setDb from "../daos/index.js";
 import uploader from "../services/upload.js";
 
@@ -11,21 +10,10 @@ let admin = true;                      //editar para acceso a todas las rutas
 //products
 router.get('/', async (request, response) => {
     const productos = await contenedorProduct.getAll()
-    if (productos.products.length != 0) {
-        response.send({
-            productos: productos.products
-        })
-    } else {
-        response.send({
-            productos: {
-                message: "No hay productos agregados"
-            }
-        })
-    }
-
+    response.send(productos)
 })
 router.get('/:pid', async (request, response) => {
-    const id = parseInt(request.params.pid)
+    const id = request.params.pid
     let result = await contenedorProduct.getById(id)
     response.send(result)
 })
@@ -39,17 +27,17 @@ router.post('/', uploader.single('image'), async (request, response) => {
         if ((product.name && product.price) != '') {
             product.thumbnail = thumbnail;
             const result = await contenedorProduct.save(product)
-            response.send({ product: result })
+            response.send({ status: result })
         } else {
             response.send({ status: "error", message: "incompleted values" })
         }
-    }else{
+    } else {
         response.send({ status: "error", description: "unauthorized path for post method" })
     }
 })
 router.put('/:pid', async (request, response) => {
     if (admin) {
-        const id = parseInt(request.params.pid)
+        const id = request.params.pid
         const productNew = request.body
         let result = await contenedorProduct.updateItem(productNew, id)
         response.send(result)
@@ -60,7 +48,7 @@ router.put('/:pid', async (request, response) => {
 })
 router.delete('/:pid', async (request, response) => {
     if (admin) {
-        const id = parseInt(request.params.pid)
+        const id = request.params.pid
         let result = await contenedorProduct.deleteById(id)
         response.send(result)
     } else {

@@ -1,5 +1,4 @@
 import { Router } from "express";
-//import ContenedorCarrito from "../daos/containerCardFs.js";
 import setDb from "../daos/index.js";
 
 const router = Router();

@@ -58,14 +58,15 @@ class ContenedorProducts {
             }
         }
     }
-    getById = async (id) => {
-        if (!id) {
+    getById = async (idArgument) => {
+        if (!idArgument) {
             return {
                 status: "Error",
                 message: "ID is required"
             }
         }
         try {
+            let id = parseInt(idArgument)
             if (fs.existsSync(pathToFile)) {
                 let data = await fs.promises.readFile(pathToFile, "utf-8")
                 let productos = JSON.parse(data)
@@ -99,9 +100,16 @@ class ContenedorProducts {
             if (fs.existsSync(pathToFile)) {
                 let data = await fs.promises.readFile(pathToFile, "utf-8")
                 let productos = JSON.parse(data);
-                return {
-                    status: "success",
-                    products: productos
+                if (productos.length != 0) {
+                    return {
+                        status: "success",
+                        products: productos
+                    }
+                } else {
+                    return {
+                        status: "Error",
+                        message: "No hay productos agregados"
+                    }
                 }
             } else {
                 return {
@@ -116,14 +124,15 @@ class ContenedorProducts {
             }
         }
     }
-    deleteById = async (id) => {
-        if (!id) {
+    deleteById = async (idArgument) => {
+        if (!idArgument) {
             return {
                 status: "Error",
                 message: "ID is required"
             }
         }
         try {
+            let id = parseInt(idArgument)
             if (fs.existsSync(pathToFile)) {
                 let data = await fs.promises.readFile(pathToFile, "utf-8")
                 let productos = JSON.parse(data)
@@ -192,15 +201,17 @@ class ContenedorProducts {
             }
         }
     }
-    updateItem = async (object, id) => {
-        if (!id) {
+    updateItem = async (object, idArgument) => {
+        if (!idArgument) {
             return {
                 status: "Error",
                 message: "ID is required"
             }
         }
-        let products = await this.getAll()
+
         try {
+            let id = parseInt(idArgument)
+            let products = await this.getAll()
             let arrayProducts = products.products.map(product => {
                 if (product.id == id) {
                     return {
