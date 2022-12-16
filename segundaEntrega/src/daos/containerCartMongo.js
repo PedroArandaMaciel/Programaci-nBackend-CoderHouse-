@@ -1,10 +1,15 @@
 import cartModel from "../models/cart.js"
 
 class containerCartMongo {
+    exists = async (idCart) => {
+        let carts = await cartModel.find({ _id: idCart })
+        return carts
+
+    }
     createCart = async (fh) => {
         const newCart = {
             timestamp: fh,
-            products: [{ "pepe": "pepe" }, { "pepe2": "pepe" }, { "pepe2": "pepe" }]
+            products: []
         }
         try {
             let response = await cartModel.create(newCart)
@@ -59,10 +64,46 @@ class containerCartMongo {
         }
 
     }
-    //faltan implementar
-    deleteCartById = async (idArgument) => { }
-    addProduct = async (idArgument, product) => { }
-    deleteProduct = async (cid, pid) => { }
+    deleteCartById = async (idArgument) => {
+        try {
+            let response = await cartModel.deleteOne({ _id: idArgument })
+            if (response.deletedCount > 0) {
+                return {
+                    status: "Success",
+                    message: "Cart deleted successfully"
+                }
+            } else {
+                return {
+                    status: "Error",
+                    Message: "Cart not found"
+                }
+            }
+        } catch (error) {
+            return {
+                status: "Error",
+                message: error.message
+            }
+        }
+    }
+    addProduct = async (idArgument, product) => {
+        try {
+            let sendProd = await cartModel.updateOne({ _id: idArgument }, { $push: { products: product } })
+            if (sendProd.modifiedCount > 0) {
+                return {
+                    status: "Success",
+                    message: "Product added successfully"
+                }
+            }
+        } catch (error) {
+            return {
+                status: "Error",
+                message: error.message
+            }
+        }
+    }
+    deleteProduct = async (cid, pid) => {
+        //falta implementar
+    }
 }
 
 export default containerCartMongo

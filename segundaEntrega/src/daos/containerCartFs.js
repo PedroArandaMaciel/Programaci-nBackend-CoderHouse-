@@ -127,7 +127,9 @@ class ContenedorCarrito {
         await fs.promises.writeFile(this.path, JSON.stringify(newCarts, null, '\t'))
         return { status: "success", payload: addedProduct }
     }
-    deleteProduct = async (cid, pid) => { 
+    deleteProduct = async (caId, prId) => { 
+        let cid = parseInt(caId)
+        let pid = parseInt(prId)
         let carts = await this.readFile()
         let deletedProd = []
         let editedProducts = carts.map(cart => {

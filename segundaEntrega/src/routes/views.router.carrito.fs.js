@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
     res.send({ payload: carts })
 })
 router.delete('/:cid', async (req, res) => {
-    const id = parseInt(req.params.cid)
+    const id = req.params.cid
     const cart = await contenedorCarrito.deleteCartById(id)
     res.send(cart)
 })
@@ -35,9 +35,9 @@ router.get('/:cid/products', async (req, res) => {
     const id = req.params.cid
     let data = await contenedorCarrito.getCartById(id)
     if (contenedor.persistenciaFsBoolean) { //Si se usa filesystem, se lee diferente la data por su estructura
-        if(data.status != "error"){
+        if (data.status != "error") {
             res.send({ status: "success", products: data.cart.products })
-        }else{
+        } else {
             res.send(data)
         }
     } else {
@@ -51,7 +51,7 @@ router.get('/:cid/products', async (req, res) => {
 })
 
 router.post('/:cid/products', async (req, res) => {
-    const id = req.params.cid
+    const idCart = req.params.cid
     const product = req.body
 
     const existProd = await contenedorProd.getById(product.id)
@@ -61,9 +61,9 @@ router.post('/:cid/products', async (req, res) => {
             message: "product not found"
         })
     } else {
-        const existsCart = await contenedorCarrito.exists(id)
+        const existsCart = await contenedorCarrito.exists(idCart)
         if (existsCart) {
-            let productToInsert = await contenedorCarrito.addProduct(id, product)
+            let productToInsert = await contenedorCarrito.addProduct(idCart, product)
             res.send(productToInsert)
         } else {
             res.send({
@@ -75,8 +75,8 @@ router.post('/:cid/products', async (req, res) => {
 })
 
 router.delete('/:cid/products/:pid', async (req, res) => {
-    const carritoId = parseInt(req.params.cid)
-    const productId = parseInt(req.params.pid)
+    const carritoId = req.params.cid
+    const productId = req.params.pid
 
     const result = await contenedorCarrito.deleteProduct(carritoId, productId)
     res.send(result)
