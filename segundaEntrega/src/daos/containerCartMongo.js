@@ -93,6 +93,11 @@ class containerCartMongo {
                     status: "Success",
                     message: "Product added successfully"
                 }
+            } else {
+                return {
+                    status: "Error",
+                    Message: "Unadded product"
+                }
             }
         } catch (error) {
             return {
@@ -102,7 +107,25 @@ class containerCartMongo {
         }
     }
     deleteProduct = async (cid, pid) => {
-        //falta implementar
+        try {
+            let data = await cartModel.updateOne({ _id: cid }, { $pull: { products: { id: pid } } })
+            if (data.modifiedCount > 0) {
+                return {
+                    status: "Success",
+                    message: "Product removed from cart"
+                }
+            } else {
+                return {
+                    status: "Error",
+                    Message: "Product not found in cart"
+                }
+            }
+        } catch (error) {
+            return {
+                status: "Error",
+                message: error.message
+            }
+        }
     }
 }
 
