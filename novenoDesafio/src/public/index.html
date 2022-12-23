@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+    </header>
+
+    <main>
+        <h1>Panel de productos</h1>
+        <form id="productForm">
+            <label>Nombre Producto</label>
+            <input name="name" id="name2"><br>
+            <label>Precio</label>
+            <input name="price" id="price2"><br>
+            <label>Imagen</label>
+            <input type="file" name="image" id="image2"><br>
+            <input type="submit">
+        </form><br>
+        <a href="http://localhost:8080/productos"><button>Revisar Productos agregados</button></a>
+        <h2>Productos en tiempo real</h2>
+        <div>
+            <table>
+                <thead>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                </thead>
+                <tbody id="products">
+
+                </tbody>
+            </table>
+        </div>
+        <br><h3>Chat grupal</h3>
+        <a href="http://localhost:8080/chat"><button>Revisar CHAT</button></a>
+    </main>
+
+    <footer>
+    </footer>
+    <script src="./index.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/products.js"></script>
+</body>
+
+</html>

@@ -9,12 +9,12 @@ const contenedor = new Contenedor(sqliteOpcions, "products")
 router.get('/productos', async (request, response) => {
     const productos = await contenedor.getAll()
     if (productos.length != 0) {
-        response.render('productos', {        
+        response.render('productos', {
             productos
         })
     } else {
-        response.render('productos', {    
-            productos : {
+        response.render('productos', {
+            productos: {
                 mensaje: "No hay productos agregados"
             }
         })
